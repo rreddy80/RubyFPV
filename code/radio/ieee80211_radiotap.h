@@ -37,7 +37,7 @@
 
 #pragma once
 
-#include <linux/if_ether.h>
+#include "../linux/if_ether.h"
 #include <linux/kernel.h>
 #include "../base/base.h"
 

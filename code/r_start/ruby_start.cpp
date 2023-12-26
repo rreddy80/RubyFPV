@@ -44,7 +44,7 @@ Code written by: Petru Soroaga, 2021-2023
 #include "../base/controller_utils.h"
 #include "../base/ruby_ipc.h"
 #include "../common/string_utils.h"
-#include "hw_config_check.h"
+#include "../r_vehicle/hw_config_check.h"
 
 static sem_t* s_pSemaphoreStarted = NULL; 
 
@@ -604,7 +604,7 @@ int main (int argc, char *argv[])
       hw_execute_bash_command_silent(szComm, NULL);
 
       fd = fopen(LOG_FILE_START, "a+");
-      if ( NULL == fd || fd < 0 )
+      if (fd == NULL || fileno(fd) < 0)
          continue;
 
       fprintf(fd, "Check for write access, succeeded on try number: %d (boot count: %d, Ruby on TTY name: %s)\n", readWriteRetryCount, s_iBootCount, tty_name);
@@ -612,7 +612,7 @@ int main (int argc, char *argv[])
       fd = NULL;
 
       fd = fopen(FILE_BOOT_COUNT, "w");
-      if ( NULL == fd || fd < 0 )
+      if (fd == NULL || fileno(fd) < 0)
          continue;
       fprintf(fd, "%d\n", s_iBootCount);
       fclose(fd);
@@ -624,7 +624,7 @@ int main (int argc, char *argv[])
    fflush(stdout);
 
    fd = fopen(LOG_FILE_START, "a+");
-   if ( NULL != fd && fd >= 0 )
+   if (fd != NULL || fileno(fd) >= 0)
    {
       fprintf(fd, "Starting run number %d; Starting Ruby on TTY name: %s\n\n", s_iBootCount, tty_name);
       fclose(fd);
